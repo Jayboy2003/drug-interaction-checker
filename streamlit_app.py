@@ -1,8 +1,8 @@
 """
 Streamlit frontend for the Drug Interaction Checker Agent.
 
-This talks directly to the existing agent pipeline (app.agents_sdk.run_agent)
-— no FastAPI server required. The same CrewAI + OpenAI Agents SDK logic runs
+Talks directly to the existing agent pipeline (app.agents_sdk.run_agent)
+-- no FastAPI server required. The same CrewAI + OpenAI Agents SDK logic runs
 behind the scenes.
 
 Run locally:
@@ -16,11 +16,20 @@ Set OPENAI_API_KEY in the app's Secrets (or your local .env).
 from __future__ import annotations
 
 import os
+import sys
 import asyncio
+from pathlib import Path
 
-import streamlit as st
+# Make sure the repo root (where the "app" package lives) is importable,
+# even if Streamlit Cloud runs this file from a different working directory.
+REPO_ROOT = Path(__file__).resolve().parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
 
-from app.crew.agents import DISCLAIMER
+import streamlit as st  # noqa: E402
+
+from app.crew.agents import DISCLAIMER  # noqa: E402
+from app.agents_sdk import run_agent  # noqa: E402
 
 # --- Streamlit page config ---
 st.set_page_config(
@@ -55,10 +64,34 @@ meds_text = st.text_area(
 
 run = st.button("Run Safety Check", type="primary", use_container_width=True)
 
+
+def _run_sync(meds: list[str]) -> dict:
+    """Call the async agent pipeline from Streamlit's sync context."""
+    try:
+        # If a loop is already running (some threaded setups), reuse it.
+        loop = asyncio.get_running_loop()
+    except RuntimeError:
+        loop = None
+
+    if loop and loop.is_running():
+        # Run in a dedicated thread so we don't block the running loop.
+        import concurrent.futures
+
+        with concurrent.futures.ThreadPoolExecutor(max_workers=1) as ex:
+            future = ex.submit(lambda: asyncio.run(run_agent(meds)))
+            report = future.result()
+    else:
+        report = asyncio.run(run_agent(meds))
+
+    # Return a plain dict so the UI code can use .get(...)
+    return report.model_dump()
+
+
 if run and meds_text.strip():
     medications = [m.strip() for m in meds_text.split(",") if m.strip()]
-    with st.spinner("Analyzing with the agent crew (Researcher → Analyst → Writer → Reviewer)…"):
-        # run_agent is async; call it from sync Streamlit context
+    with st.spinner(
+        "Analyzing with the agent crew (Researcher → Analyst → Writer → Reviewer)…"
+    ):
         report = _run_sync(medications)
 
     overall = (report.get("overall_risk") or "low").lower()
@@ -79,7 +112,9 @@ if run and meds_text.strip():
 
     found = report.get("patient_medications", [])
     if found:
-        st.markdown("**Medications checked:** " + ", ".join(f"`{m}`" for m in found))
+        st.markdown(
+            "**Medications checked:** " + ", ".join(f"`{m}`" for m in found)
+        )
     unknown = report.get("unrecognised_medications", [])
     if unknown:
         st.error("Not recognised: " + ", ".join(unknown))
@@ -107,7 +142,9 @@ if run and meds_text.strip():
                 st.markdown(f"**Management:** {f.get('management','')}")
                 st.divider()
     else:
-        st.success("No known dangerous interactions found for the recognised medications.")
+        st.success(
+            "No known dangerous interactions found for the recognised medications."
+        )
 
     recs = report.get("recommendations", [])
     if recs:
@@ -116,28 +153,18 @@ if run and meds_text.strip():
             st.markdown(f"- {r}")
 
     st.markdown("---")
-    st.caption(DISCLAIMER)
+    st.caption(report.get("disclaimer", DISCLAIMER))
 
 elif run and not meds_text.strip():
     st.warning("Please enter at least one medication.")
 
 
-# --- helper to call the async agent pipeline from sync Streamlit context ---
-def _run_sync(meds):
-    from app.agents_sdk import run_agent
-
-    try:
-        # Reuse the running loop if one exists
-        loop = asyncio.get_event_loop()
-        return loop.run_until_complete(run_agent(meds))
-    except RuntimeError:
-        # No running loop (fresh thread) -> create one
-        return asyncio.run(run_agent(meds))
-
-
-# Show config status in the sidebar
+# --- Show config status in the sidebar ---
 with st.sidebar:
     st.markdown("### Status")
+    st.write("OpenAI key set:", bool(os.getenv("OPENAI_API_KEY")))
+    st.write("Model:", os.getenv("OPENAI_MODEL", "gpt-4o-mini"))
+    st.caption(DISCLAIMER)
     st.write("OpenAI key set:", bool(os.getenv("OPENAI_API_KEY")))
     st.write("Model:", os.getenv("OPENAI_MODEL", "gpt- -mini"))
     st.caption(DISCLAIMER)
