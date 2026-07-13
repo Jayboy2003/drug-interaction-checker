@@ -12,6 +12,7 @@ clinical source (e.g. NIH RxNav, Lexicomp, Micromedex).
 from __future__ import annotations
 
 import json
+import re
 from functools import lru_cache
 from pathlib import Path
 from typing import Any
@@ -46,27 +47,70 @@ def _normalize(name: str) -> str:
     return name.strip().lower()
 
 
-def _resolve_token(token: str, db: dict[str, Any]) -> str | None:
-    """Map a user-entered drug name/alias to a canonical drug key in the DB."""
-    token = _normalize(token)
+def _tokenize(token: str) -> set[str]:
+    """Split a drug name into comparable words, dropping punctuation/stopwords."""
+    words = re.sub(r"[^a-z0-9 ]", " ", token.lower()).split()
+    # drop common dosage / formulation noise so 'warfarin 5mg' matches 'warfarin'
+    stop = {
+        "mg", "mcg", "g", "ml", "tablet", "tablets", "cap", "caps", "capsule",
+        "capsules", "oral", "tab", "sr", "er", "xr", "la", "immediate",
+        "release", "extended", "generic", "brand",
+    }
+    return {w for w in words if w not in stop}
+
+
+def _resolve_token(token: str, db: dict[str, Any]) -> list[str]:
+    """
+    Map a user-entered drug name/alias to one or more canonical drug keys.
+
+    Returns a LIST (a name like 'nsaid' can match several drugs).
+    Tries, in order:
+      1. exact canonical key (case-insensitive)
+      2.BaseTool exact alias (case-insensitive)
+      3. token-set containment (e.g. 'warfarin 5mg' -> warfarin)
+      4. substring / fuzzy containment on canonical name + aliases
+    """
+    token_n = _normalize(token)
     drugs = db.get("drugs", {})
-    # exact canonical match
-    if token in drugs:
-        return token
-    # exact alias match
+
+    # 1. exact canonical key
+    for key in drugs:
+        if token_n == key.lower():
+            return [key]
+
+    # 2. exact alias
     for key, meta in drugs.items():
-        aliases = [a.lower() for a in meta.get("aliases", [])]
-        if token in aliases:
-            return key
-    # partial alias match (e.g. 'advil' vs 'ibuprofen')
-    for key, meta in meta.get("aliases", []) if False else []:
-        pass
+        for a in meta.get("aliases", []):
+            if token_n == a.lower():
+                return [key]
+
+    # 3. token-set containment (handles 'warfarin 5mg', 'lisinopril 10 mg')
+    tt = _tokenize(token_n)
+    if tt:
+        for key in drugs:
+            if tt == _tokenize(key):
+                return [key]
+        for key, meta in drugs.items():
+            ka = _tokenize(key)
+            if tt and ka and (tt <= ka or ka <= tt):
+                # one is contained in the other (ignoring dosage words)
+                if tt & ka:  # at least one real word overlaps
+                    return [key]
+            for a in meta.get("aliases", []):
+                if tt and tt <= _tokenize(a):
+                    return [key]
+
+    # 4. substring / fuzzy containment on name + aliases
+    results: list[str] = []
     for key, meta in drugs.items():
-        aliases = [a.lower() for a in meta.get("aliases", [])]
-        for a in aliases:
-            if token in a or a in token:
-                return key
-    return None
+        haystacks = [key.lower()] + [a.lower() for a in meta.get("aliases", [])]
+        for h in haystacks:
+            if not h:
+                continue
+            if token_n in h or h in token_n:
+                if key not in results:
+                    results.append(key)
+    return results
 
 
 def lookup_interactions(medications: list[str]) -> LookupResult:
@@ -77,16 +121,17 @@ def lookup_interactions(medications: list[str]) -> LookupResult:
     db = _load_db()
     interactions = db.get("interactions", [])
 
-    resolved: dict[str, str] = {}  # original -> canonical
+    resolved_keys: set[str] = set()  # canonical keys recognised
     unknown: list[str] = []
     for med in medications:
-        canon = _resolve_token(med, db)
-        if canon:
-            resolved[_normalize(med)] = canon
+        matches = _resolve_token(med, db)
+        if matches:
+            # a name like 'nsaid' can map to several -> keep all
+            resolved_keys.update(m.lower() for m in matches)
         else:
             unknown.append(med.strip())
 
-    canon_keys = list(set(resolved.values()))
+    canon_keys = sorted(resolved_keys)
     hits: list[InteractionHit] = []
     seen = set()
     for pair in interactions:
