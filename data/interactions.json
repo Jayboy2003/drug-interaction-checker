@@ -1,190 +1,130 @@
 {
   "_meta": {
-    "name": "Curated Drug Interaction Knowledge Base (Demo)",
-    "version": "1.0.0",
-    "source_note": "Illustrative, offline dataset for hackathon demonstration only. NOT a substitute for clinical resources (e.g., NIH RxNav, Lexicomp, Micromedex).",
-    "severity_scale": ["low", "moderate", "high", "contraindicated"]
+    "name": "Drug Interaction Knowledge Base (Nigeria-focused demo)",
+    "version": "2.0.0",
+    "source_note": "Illustrative, offline dataset for hackathon demonstration only. NOT a substitute for clinical resources (NAFDAC Greenbook is a product registry, not an interaction source; use NIH RxNav, Lexicomp, Micromedex, or a pharmacist). Includes common Nigerian generics and brands (antimalarials, antibiotics, antihypertensives, antidiabetics).",
+    "severity_scale": ["low", "moderate", "high", "contraindicated"],
+    "interaction_data_note": "Interaction pairs below are well-documented, public clinical facts included for demo purposes; verify with a clinician."
   },
   "drugs": {
     "warfarin": { "aliases": ["coumadin", "jasodin"], "class": "anticoagulant" },
-    "aspirin": { "aliases": ["asa", "bayer"], "class": "antiplatelet / nsaid" },
-    "ibuprofen": { "aliases": ["advil", "motrin", "nsaid"], "class": "nsaid" },
+    "aspirin": { "aliases": ["asa", "bayer", "disprin"], "class": "antiplatelet / nsaid" },
+    "ibuprofen": { "aliases": ["advil", "motrin", "nsaid", "brufen", "iprofen"], "class": "nsaid" },
     "naproxen": { "aliases": ["aleve", "nsaid"], "class": "nsaid" },
+    "paracetamol": { "aliases": ["acetaminophen", "tylenol", "panadol", "emzor-paracetamol", "acetamol"], "class": "analgesic / antipyretic" },
+    "diclofenac": { "aliases": ["voltaren", "cataflam", "nsaid"], "class": "nsaid" },
     "clopidogrel": { "aliases": ["plavix"], "class": "antiplatelet" },
     "simvastatin": { "aliases": ["zocor"], "class": "statin" },
     "atorvastatin": { "aliases": ["lipitor"], "class": "statin" },
-    "clarithromycin": { "aliases": ["biaxin", "macrolide"], "class": "macrolide antibiotic" },
-    "erythromycin": { "aliases": ["macrolide"], "class": "macrolide antibiotic" },
+    "rosuvastatin": { "aliases": ["crestor"], "class": "statin" },
+    "clarithromycin": { "aliases": ["biaxin", "macrolide", "klacin"], "class": "macrolide antibiotic" },
+    "erythromycin": { "aliases": ["macrolide", "erythrocin"], "class": "macrolide antibiotic" },
+    "azithromycin": { "aliases": ["zithromax", "macrolide", "azithro", "zithro"], "class": "macrolide antibiotic" },
     "amiodarone": { "aliases": ["cordarone"], "class": "antiarrhythmic" },
-    "metoprolol": { "aliases": ["lopressor", "beta-blocker"], "class": "beta-blocker" },
-    "lisinopril": { "aliases": ["ace inhibitor", "prinivil", "zestril"], "class": "ace inhibitor" },
+    "metoprolol": { "aliases": ["lopressor", "beta-blocker", "betaloc", "toprol"], "class": "beta-blocker" },
+    "atenolol": { "aliases": ["tenormin", "beta-blocker"], "class": "beta-blocker" },
+    "amlodipine": { "aliases": ["norvasc", "calcium channel blocker"], "class": "calcium channel blocker" },
+    "lisinopril": { "aliases": ["ace inhibitor", "prinivil", "zestril", "ace-inhibitor"], "class": "ace inhibitor" },
+    "enalapril": { "aliases": ["vasotec", "ace inhibitor", "renitec"], "class": "ace inhibitor" },
     "spironolactone": { "aliases": ["aldactone"], "class": "potassium-sparing diuretic" },
-    "trimethoprim": { "aliases": ["tmp", "bactrim", "cotrimoxazole"], "class": "antibiotic" },
+    "hydrochlorothiazide": { "aliases": ["hctz", "diuretic", "esidrex"], "class": "thiazide diuretic" },
+    "furosemide": { "aliases": ["lasix", "diuretic"], "class": "loop diuretic" },
+    "trimethoprim": { "aliases": ["tmp", "bactrim", "cotrimoxazole", "septrin", "co-trimoxazole"], "class": "antibiotic" },
     "sildenafil": { "aliases": ["viagra"], "class": "pde5 inhibitor" },
+    "tadalafil": { "aliases": ["cialis", "pde5 inhibitor"], "class": "pde5 inhibitor" },
     "nitroglycerin": { "aliases": ["nitro", "gtn"], "class": "nitrate" },
     "fluoxetine": { "aliases": ["prozac", "ssri"], "class": "ssri" },
     "sertraline": { "aliases": ["zoloft", "ssri"], "class": "ssri" },
-    "tramadol": { "aliases": ["ultram", "opioid"], "class": "opioid analgesic" },
+    "amitriptyline": { "aliases": ["elavil", "tricyclic"], "class": "tricyclic antidepressant" },
+    "tramadol": { "aliases": ["ultram", "tramal", "opioid"], "class": "opioid analgesic" },
+    "codeine": { "aliases": ["opioid", "panadeine", "paracodol"], "class": "opioid analgesic" },
     "sumatriptan": { "aliases": ["imitrex", "triptan"], "class": "triptan" },
     "methotrexate": { "aliases": ["mtx", "oncotrexate"], "class": "antimetabolite" },
-    "levothyroxine": { "aliases": ["synthroid", "lt4"], "class": "thyroid hormone" },
-    "omeprazole": { "aliases": ["prilosec", "ppi"], "class": "proton pump inhibitor" },
+    "levothyroxine": { "aliases": ["synthroid", "lt4", "eloxim", "thyroxine"], "class": "thyroid hormone" },
+    "omeprazole": { "aliases": ["prilosec", "ppi", "losec"], "class": "proton pump inhibitor" },
+    "pantoprazole": { "aliases": ["ppi", "protonix", "pantecta"], "class": "proton pump inhibitor" },
     "digoxin": { "aliases": ["lanoxin"], "class": "cardiac glycoside" },
-    "verapamil": { "aliases": ["calan", "calcium channel blocker"], "class": "calcium channel blocker" },
+    "verapamil": { "aliases": ["calan", "calcium channel blocker", "isoptin"], "class": "calcium channel blocker" },
     "diltiazem": { "aliases": ["cardizem", "calcium channel blocker"], "class": "calcium channel blocker" },
-    "potassium": { "aliases": ["kcl", "k+"], "class": "electrolyte" },
-    "Alcohol": { "aliases": ["ethanol", "drinking"], "class": "substance" }
+    "potassium": { "aliases": ["kcl", "k+", "kaylite"], "class": "electrolyte" },
+    "metformin": { "aliases": ["glucophage", "metfomin", "glucovance-combo"], "class": "biguanide antidiabetic" },
+    "glibenclamide": { "aliases": ["glyburide", "daonil", "micronase", "glibens"], "class": "sulfonylurea antidiabetic" },
+    "insulin": { "aliases": ["humulin", "novolin", "lantus", "glargine", "actrapid"], "class": "antidiabetic" },
+    "amoxicillin": { "aliases": ["amoxil", "augmentin-combo", "amox", "cloxacillin-combo"], "class": "penicillin antibiotic" },
+    "amoxicillin-clavulanate": { "aliases": ["augmentin", "amoxyclav", "clavamox"], "class": "penicillin antibiotic" },
+    "ciprofloxacin": { "aliases": ["cipro", "ciprotab", "quinolone"], "class": "fluoroquinolone antibiotic" },
+    "levofloxacin": { "aliases": ["levaquin", "quinolone"], "class": "fluoroquinolone antibiotic" },
+    "cefixime": { "aliases": ["cefspan", "suprax", "cephodoxime-combo"], "class": "cephalosporin antibiotic" },
+    "ceftriaxone": { "aliases": ["rocephin", "ceftex"], "class": "cephalosporin antibiotic" },
+    "metronidazole": { "aliases": ["flagyl", "metrogyl", "tinidazole-combo"], "class": "antiprotozoal / antibiotic" },
+    "doxycycline": { "aliases": ["doxytab", "vibramycin", "tetracycline-class"], "class": "tetracycline antibiotic" },
+    "chloroquine": { "aliases": ["aralen", "nivaquine"], "class": "antimalarial (aminoquinoline)" },
+    "hydroxychloroquine": { "aliases": ["plaquenil"], "class": "antimalarial / dmard" },
+    "quinine": { "aliases": ["quin", "tonic water-quinine"], "class": "antimalarial" },
+    "artemether-lumefantrine": { "aliases": ["coartem", "lonart", "amatem", "artequick-combo", "p-alaxin-combo", "act"], "class": "antimalarial (act)" },
+    "amodiaquine": { "aliases": ["camosunate-combo", "amopal-combo", "flomoquine"], "class": "antimalarial" },
+    "sulfadoxine-pyrimethamine": { "aliases": ["fansidar", "malara"], "class": "antimalarial" },
+    "mefloquine": { "aliases": ["lariam"], "class": "antimalarial" },
+    "pyrimethamine": { "aliases": ["daraprim"], "class": "antimalarial" },
+    "alcohol": { "aliases": ["ethanol", "drinking", "beer", "wine", "ogogoro", "gin"], "class": "substance" },
+    "prednisolone": { "aliases": ["prednisone", "prednisolon", "cortisone", "steroid"], "class": "corticosteroid" },
+    "dexamethasone": { "aliases": ["dexamethasone", "decadron", "steroid"], "class": "corticosteroid" }
   },
   "interactions": [
-    {
-      "pair": ["warfarin", "aspirin"],
-      "severity": "high",
-      "mechanism": "Additive inhibition of hemostasis (anticoagulant + antiplatelet) markedly increases bleeding risk.",
-      "management": "Avoid combination unless specifically directed by a clinician; monitor for bleeding."
-    },
-    {
-      "pair": ["warfarin", "ibuprofen"],
-      "severity": "high",
-      "mechanism": "NSAID increases bleeding risk and can displace warfarin from protein binding, raising INR.",
-      "management": "Prefer acetaminophen for analgesia; avoid chronic NSAID use."
-    },
-    {
-      "pair": ["warfarin", "naproxen"],
-      "severity": "high",
-      "mechanism": "NSAID potentiates anticoagulant effect and irritates GI mucosa, raising GI bleed risk.",
-      "management": "Avoid; use alternative analgesia under guidance."
-    },
-    {
-      "pair": ["warfarin", "clarithromycin"],
-      "severity": "high",
-      "mechanism": "Clarithromycin inhibits CYP2C9/CYP3A4, reducing warfarin metabolism and increasing INR.",
-      "management": "Monitor INR closely; consider alternative antibiotic."
-    },
-    {
-      "pair": ["simvastatin", "clarithromycin"],
-      "severity": "contraindicated",
-      "mechanism": "Clarithromycin strongly inhibits CYP3A4, raising simvastatin levels and risk of rhabdomyolysis.",
-      "management": "Contraindicated; suspend statin or use non-interacting antibiotic."
-    },
-    {
-      "pair": ["simvastatin", "amiodarone"],
-      "severity": "high",
-      "mechanism": "Amiodarone inhibits CYP3A4; combined with simvastatin increases myopathy risk.",
-      "management": "Limit simvastatin dose (max 20 mg/day) or switch statin."
-    },
-    {
-      "pair": ["atorvastatin", "clarithromycin"],
-      "severity": "moderate",
-      "mechanism": "Clarithromycin inhibits CYP3A4, modestly increasing atorvastatin exposure.",
-      "management": "Limit atorvastatin to 20 mg/day during the course."
-    },
-    {
-      "pair": ["clopidogrel", "omeprazole"],
-      "severity": "moderate",
-      "mechanism": "Omeprazole inhibits CYP2C19, reducing activation of clopidogrel (antiplatelet effect blunted).",
-      "management": "Prefer pantoprazole if PPI needed with clopidogrel."
-    },
-    {
-      "pair": ["lisinopril", "spironolactone"],
-      "severity": "high",
-      "mechanism": "Both raise serum potassium; combination risks dangerous hyperkalemia.",
-      "management": "Monitor potassium and renal function; avoid if eGFR low."
-    },
-    {
-      "pair": ["lisinopril", "potassium"],
-      "severity": "high",
-      "mechanism": "ACE inhibitor reduces potassium excretion; supplements can cause hyperkalemia.",
-      "management": "Avoid routine potassium supplements; monitor levels."
-    },
-    {
-      "pair": ["spironolactone", "potassium"],
-      "severity": "high",
-      "mechanism": "Potassium-sparing diuretic + supplement risks severe hyperkalemia (cardiac arrhythmia).",
-      "management": "Do not combine without close monitoring."
-    },
-    {
-      "pair": ["trimethoprim", "spironolactone"],
-      "severity": "high",
-      "mechanism": "Trimethoprim has potassium-sparing effect; additive hyperkalemia with spironolactone.",
-      "management": "Monitor potassium closely."
-    },
-    {
-      "pair": ["sildenafil", "nitroglycerin"],
-      "severity": "contraindicated",
-      "mechanism": "Both lower blood pressure via different pathways; combination can cause life-threatening hypotension.",
-      "management": "Absolute contraindication; never use nitrates with PDE5 inhibitors."
-    },
-    {
-      "pair": ["fluoxetine", "tramadol"],
-      "severity": "high",
-      "mechanism": "SSRIs + tramadol lower seizure threshold and increase serotonergic effects.",
-      "management": "Use caution; monitor for seizures/serotonin syndrome."
-    },
-    {
-      "pair": ["sertraline", "tramadol"],
-      "severity": "high",
-      "mechanism": "Additive serotonergic activity raises serotonin syndrome and seizure risk.",
-      "management": "Monitor closely; consider alternative analgesic."
-    },
-    {
-      "pair": ["sumatriptan", "sertraline"],
-      "severity": "moderate",
-      "mechanism": "Triptan + SSRI carries small serotonin syndrome risk.",
-      "management": "Use lowest effective triptan dose; counsel on symptoms."
-    },
-    {
-      "pair": ["fluoxetine", "sumatriptan"],
-      "severity": "moderate",
-      "mechanism": "Serotonergic combination; rare serotonin syndrome reported.",
-      "management": "Monitor; counsel patient on warning signs."
-    },
-    {
-      "pair": ["methotrexate", "ibuprofen"],
-      "severity": "high",
-      "mechanism": "NSAID reduces methotrexate clearance, raising toxic levels (bone marrow suppression).",
-      "management": "Avoid NSAIDs, especially high-dose MTX; use acetaminophen."
-    },
-    {
-      "pair": ["methotrexate", "trimethoprim"],
-      "severity": "high",
-      "mechanism": "Additive folate antagonism increases marrow toxicity and pancytopenia risk.",
-      "management": "Avoid combination where possible."
-    },
-    {
-      "pair": ["digoxin", "verapamil"],
-      "severity": "high",
-      "mechanism": "Verapamil reduces digoxin clearance, risking digoxin toxicity (arrhythmia, nausea).",
-      "management": "Reduce digoxin dose; monitor levels closely."
-    },
-    {
-      "pair": ["digoxin", "diltiazem"],
-      "severity": "moderate",
-      "mechanism": "Diltiazem modestly raises digoxin levels.",
-      "management": "Monitor digoxin levels; adjust dose."
-    },
-    {
-      "pair": ["metoprolol", "verapamil"],
-      "severity": "high",
-      "mechanism": "Both depress AV node; combination risks severe bradycardia / heart block.",
-      "management": "Avoid concurrent use; if needed, close cardiac monitoring."
-    },
-    {
-      "pair": ["warfarin", "Alcohol"],
-      "severity": "moderate",
-      "mechanism": "Chronic alcohol use alters warfarin metabolism and GI mucosa, raising bleed risk.",
-      "management": "Limit alcohol; monitor INR."
-    },
-    {
-      "pair": ["metoprolol", "sildenafil"],
-      "severity": "moderate",
-      "mechanism": "Additive blood-pressure lowering; risk of symptomatic hypotension.",
-      "management": "Monitor BP; counsel on dizziness."
-    },
-    {
-      "pair": ["ibuprofen", "lisinopril"],
-      "severity": "moderate",
-      "mechanism": "NSAIDs blunt ACE inhibitor effect and risk renal impairment ('triple whammy' if diuretic added).",
-      "management": "Limit NSAID use; monitor renal function."
-    }
+    { "pair": ["warfarin", "aspirin"], "severity": "high", "mechanism": "Additive inhibition of hemostasis (anticoagulant + antiplatelet) markedly increases bleeding risk.", "management": "Avoid combination unless specifically directed by a clinician; monitor for bleeding." },
+    { "pair": ["warfarin", "ibuprofen"], "severity": "high", "mechanism": "NSAID increases bleeding risk and can displace warfarin from protein binding, raising INR.", "management": "Prefer paracetamol for analgesia; avoid chronic NSAID use." },
+    { "pair": ["warfarin", "naproxen"], "severity": "high", "mechanism": "NSAID potentiates anticoagulant effect and irritates GI mucosa, raising GI bleed risk.", "management": "Avoid; use alternative analgesia under guidance." },
+    { "pair": ["warfarin", "diclofenac"], "severity": "high", "mechanism": "NSAID raises bleeding risk and interacts with warfarin metabolism.", "management": "Avoid; prefer paracetamol." },
+    { "pair": ["warfarin", "clarithromycin"], "severity": "high", "mechanism": "Clarithromycin inhibits CYP2C9/CYP3A4, reducing warfarin metabolism and increasing INR.", "management": "Monitor INR closely; consider alternative antibiotic." },
+    { "pair": ["warfarin", "quinine"], "severity": "high", "mechanism": "Quinine can prolong QT and potentiate anticoagulant effects; increased bleeding risk.", "management": "Monitor INR; use alternative antimalarial where possible." },
+    { "pair": ["warfarin", "alcohol"], "severity": "moderate", "mechanism": "Chronic alcohol use alters warfarin metabolism and GI mucosa, raising bleed risk.", "management": "Limit alcohol; monitor INR." },
+    { "pair": ["simvastatin", "clarithromycin"], "severity": "contraindicated", "mechanism": "Clarithromycin strongly inhibits CYP3A4, raising simvastatin levels and risk of rhabdomyolysis.", "management": "Contraindicated; suspend statin or use non-interacting antibiotic." },
+    { "pair": ["atorvastatin", "clarithromycin"], "severity": "moderate", "mechanism": "Clarithromycin inhibits CYP3A4, modestly increasing atorvastatin exposure.", "management": "Limit atorvastatin to 20 mg/day during the course." },
+    { "pair": ["rosuvastatin", "clarithromycin"], "severity": "moderate", "mechanism": "Clarithromycin raises rosuvastatin levels via OATP/CYP inhibition.", "management": "Monitor for myalgia; consider dose reduction." },
+    { "pair": ["simvastatin", "amiodarone"], "severity": "high", "mechanism": "Amiodarone inhibits CYP3A4; combined with simvastatin increases myopathy risk.", "management": "Limit simvastatin dose (max 20 mg/day) or switch statin." },
+    { "pair": ["clopidogrel", "omeprazole"], "severity": "moderate", "mechanism": "Omeprazole inhibits CYP2C19, reducing activation of clopidogrel (antiplatelet effect blunted).", "management": "Prefer pantoprazole if PPI needed with clopidogrel." },
+    { "pair": ["lisinopril", "spironolactone"], "severity": "high", "mechanism": "Both raise serum potassium; combination risks dangerous hyperkalemia.", "management": "Monitor potassium and renal function; avoid if eGFR low." },
+    { "pair": ["lisinopril", "potassium"], "severity": "high", "mechanism": "ACE inhibitor reduces potassium excretion; supplements can cause hyperkalemia.", "management": "Avoid routine potassium supplements; monitor levels." },
+    { "pair": ["enalapril", "spironolactone"], "severity": "high", "mechanism": "ACE inhibitor + potassium-sparing diuretic raises hyperkalemia risk.", "management": "Monitor potassium and renal function." },
+    { "pair": ["spironolactone", "potassium"], "severity": "high", "mechanism": "Potassium-sparing diuretic + supplement risks severe hyperkalemia (cardiac arrhythmia).", "management": "Do not combine without close monitoring." },
+    { "pair": ["trimethoprim", "spironolactone"], "severity": "high", "mechanism": "Trimethoprim has potassium-sparing effect; additive hyperkalemia with spironolactone.", "management": "Monitor potassium closely." },
+    { "pair": ["hydrochlorothiazide", "lisinopril"], "severity": "low", "mechanism": "Often used together intentionally (complement diuretic + ace inhibitor); watch for hypotension/renal.", "management": "Common safe combo; monitor BP and renal function." },
+    { "pair": ["sildenafil", "nitroglycerin"], "severity": "contraindicated", "mechanism": "Both lower blood pressure via different pathways; combination can cause life-threatening hypotension.", "management": "Absolute contraindication; never use nitrates with PDE5 inhibitors." },
+    { "pair": ["tadalafil", "nitroglycerin"], "severity": "contraindicated", "mechanism": "PDE5 inhibitor + nitrate causes severe, refractory hypotension.", "management": "Absolute contraindication." },
+    { "pair": ["sildenafil", "metoprolol"], "severity": "moderate", "mechanism": "Additive blood-pressure lowering; risk of symptomatic hypotension.", "management": "Monitor BP; counsel on dizziness." },
+    { "pair": ["fluoxetine", "tramadol"], "severity": "high", "mechanism": "SSRIs + tramadol lower seizure threshold and increase serotonergic effects.", "management": "Use caution; monitor for seizures/serotonin syndrome." },
+    { "pair": ["sertraline", "tramadol"], "severity": "high", "mechanism": "Additive serotonergic activity raises serotonin syndrome and seizure risk.", "management": "Monitor closely; consider alternative analgesic." },
+    { "pair": ["amitriptyline", "tramadol"], "severity": "high", "mechanism": "Tricyclic + tramadol increases seizure risk and serotonergic effects.", "management": "Use caution; monitor." },
+    { "pair": ["sumatriptan", "sertraline"], "severity": "moderate", "mechanism": "Triptan + SSRI carries small serotonin syndrome risk.", "management": "Use lowest effective triptan dose; counsel on symptoms." },
+    { "pair": ["fluoxetine", "sumatriptan"], "severity": "moderate", "mechanism": "Serotonergic combination; rare serotonin syndrome reported.", "management": "Monitor; counsel patient on warning signs." },
+    { "pair": ["methotrexate", "ibuprofen"], "severity": "high", "mechanism": "NSAID reduces methotrexate clearance, raising toxic levels (bone marrow suppression).", "management": "Avoid NSAIDs, especially high-dose MTX; use paracetamol." },
+    { "pair": ["methotrexate", "trimethoprim"], "severity": "high", "mechanism": "Additive folate antagonism increases marrow toxicity and pancytopenia risk.", "management": "Avoid combination where possible." },
+    { "pair": ["digoxin", "verapamil"], "severity": "high", "mechanism": "Verapamil reduces digoxin clearance, risking digoxin toxicity (arrhythmia, nausea).", "management": "Reduce digoxin dose; monitor levels closely." },
+    { "pair": ["digoxin", "diltiazem"], "severity": "moderate", "mechanism": "Diltiazem modestly raises digoxin levels.", "management": "Monitor digoxin levels; adjust dose." },
+    { "pair": ["digoxin", "hydrochlorothiazide"], "severity": "moderate", "mechanism": "Diuretics cause potassium loss, which potentiates digoxin toxicity.", "management": "Monitor potassium and digoxin levels." },
+    { "pair": ["metoprolol", "verapamil"], "severity": "high", "mechanism": "Both depress AV node; combination risks severe bradycardia / heart block.", "management": "Avoid concurrent use; if needed, close cardiac monitoring." },
+    { "pair": ["amlodipine", "simvastatin"], "severity": "moderate", "mechanism": "Amlodipine mildly inhibits CYP3A4, slightly raising simvastatin levels.", "management": "Keep simvastatin <= 20 mg/day; monitor for myalgia." },
+    { "pair": ["ibuprofen", "lisinopril"], "severity": "moderate", "mechanism": "NSAIDs blunt ACE inhibitor effect and risk renal impairment ('triple whammy' if diuretic added).", "management": "Limit NSAID use; monitor renal function." },
+    { "pair": ["diclofenac", "lisinopril"], "severity": "moderate", "mechanism": "NSAID reduces ACE inhibitor efficacy and risks renal impairment.", "management": "Prefer paracetamol; monitor renal function." },
+    { "pair": ["metronidazole", "alcohol"], "severity": "high", "mechanism": "Disulfiram-like reaction (flushing, vomiting, tachycardia) from metronidazole + alcohol.", "management": "Avoid alcohol during and 48h after metronidazole." },
+    { "pair": ["metronidazole", "warfarin"], "severity": "moderate", "mechanism": "Metronidazole inhibits warfarin metabolism, raising INR and bleed risk.", "management": "Monitor INR closely during the course." },
+    { "pair": ["ciprofloxacin", "ibuprofen"], "severity": "moderate", "mechanism": "Fluoroquinolones + NSAIDs raise seizure risk (CNS excitation).", "management": "Use caution; avoid NSAIDs if seizure-prone." },
+    { "pair": ["ciprofloxacin", "warfarin"], "severity": "moderate", "mechanism": "Ciprofloxacin inhibits warfarin metabolism, raising INR.", "management": "Monitor INR; adjust dose if needed." },
+    { "pair": ["levofloxacin", "warfarin"], "severity": "moderate", "mechanism": "Fluoroquinolone raises warfarin levels; increased bleeding.", "management": "Monitor INR." },
+    { "pair": ["doxycycline", "warfarin"], "severity": "low", "mechanism": "Doxycycline may slightly reduce warfarin effect in some patients.", "management": "Monitor INR; minor adjustment possible." },
+    { "pair": ["amoxicillin", "warfarin"], "severity": "low", "mechanism": "Antibiotics can alter gut flora and warfarin effect; small INR shift.", "management": "Monitor INR during antibiotic course." },
+    { "pair": ["paracetamol", "warfarin"], "severity": "moderate", "mechanism": "High-dose paracetamol (>2g/day chronic) can raise INR and bleeding risk.", "management": "Keep paracetamol modest; monitor if used heavily." },
+    { "pair": ["prednisolone", "warfarin"], "severity": "moderate", "mechanism": "Steroids can raise bleeding risk (GI ulcer) and alter warfarin response.", "management": "Monitor; protect GI if long-term steroids." },
+    { "pair": ["prednisolone", "insulin"], "severity": "moderate", "mechanism": "Corticosteroids raise blood glucose, counteracting insulin/diabetes control.", "management": "Monitor glucose; adjust antidiabetic dose." },
+    { "pair": ["prednisolone", "metformin"], "severity": "moderate", "mechanism": "Steroids increase glycemia, reducing metformin's effect.", "management": "Monitor glucose; anticipate dose adjustment." },
+    { "pair": ["clarithromycin", "warfarin"], "severity": "high", "mechanism": "Clarithromycin inhibits warfarin metabolism, raising INR.", "management": "Monitor INR closely." },
+    { "pair": ["clarithromycin", "tadalafil"], "severity": "moderate", "mechanism": "Clarithromycin inhibits CYP3A4, raising PDE5 inhibitor levels.", "management": "Reduce tadalafil dose; watch for hypotension." },
+    { "pair": ["codeine", "tramadol"], "severity": "moderate", "mechanism": "Two opioids additive CNS/respiratory depression and constipation.", "management": "Avoid combining; reduce doses if necessary." },
+    { "pair": ["codeine", "fluoxetine"], "severity": "moderate", "mechanism": "SSRIs may reduce codeine analgesia (CYP2D6) and add serotonergic risk.", "management": "Monitor; consider alternative analgesic." },
+    { "pair": ["levothyroxine", "warfarin"], "severity": "low", "mechanism": "Thyroid hormone normalisation changes warfarin dosing requirement.", "management": "Recheck INR after thyroid dose changes." },
+    { "pair": ["omeprazole", "methotrexate"], "severity": "moderate", "mechanism": "PPI reduces methotrexate clearance, raising levels (toxicity).", "management": "Use pantoprazole or pause PPI with high-dose MTX." },
+    { "pair": ["hydroxychloroquine", "warfarin"], "severity": "low", "mechanism": "Minor INR changes reported with hydroxychloroquine.", "management": "Monitor INR." },
+    { "pair": ["sulfadoxine-pyrimethamine", "methotrexate"], "severity": "moderate", "mechanism": "Both folate-related; additive marrow suppression risk.", "management": "Avoid combining; monitor counts." },
+    { "pair": ["chloroquine", "warfarin"], "severity": "low", "mechanism": "Chloroquine can potentiate warfarin; small INR increase.", "management": "Monitor INR." }
   ]
 }
