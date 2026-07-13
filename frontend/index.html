@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Drug Interaction Checker Agent</title>
+  <style>
+    :root {
+      --bg: #0f172a; --card: #1e293b; --accent: #38bdf8; --text: #e2e8f0;
+      --muted: #94a3b8; --danger: #ef4444; --warn: #f59e0b; --ok: #22c55e;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: var(--bg); color: var(--text); line-height: 1.5;
+    }
+    .wrap { max-width: 820px; margin: 0 auto; padding: 2rem 1rem 4rem; }
+    h1 { font-size: 1.8rem; margin-bottom: .25rem; }
+    .sub { color: var(--muted); margin-bottom: 1.5rem; }
+    .card { background: var(--card); border-radius: 12px; padding: 1.25rem; margin-bottom: 1.25rem; }
+    label { display: block; font-weight: 600; margin-bottom: .5rem; }
+    textarea {
+      width: 100%; min-height: 90px; border-radius: 8px; border: 1px solid #334155;
+      background: #0b1220; color: var(--text); padding: .75rem; font-size: 1rem; resize: vertical;
+    }
+    button {
+      margin-top: 1rem; background: var(--accent); color: #06283d; border: none;
+      padding: .75rem 1.5rem; font-size: 1rem; font-weight: 700; border-radius: 8px; cursor: pointer;
+    }
+    button:disabled { opacity: .5; cursor: not-allowed; }
+    .disclaimer {
+      background: #422006; border: 1px solid var(--warn); color: #fde68a;
+      padding: .85rem 1rem; border-radius: 8px; font-size: .85rem; margin-bottom: 1.5rem;
+    }
+    .risk { display: inline-block; padding: .25rem .7rem; border-radius: 999px; font-weight: 700; font-size: .8rem; }
+    .risk.low { background: #064e3b; color: var(--ok); }
+    .risk.moderate { background: #422006; color: var(--warn); }
+    .risk.high { background: #450a0a; color: var(--danger); }
+    .risk.contraindicated { background: #450a0a; color: #fca5a5; border: 1px solid var(--danger); }
+    .finding { border-left: 4px solid var(--muted); padding: .5rem 0 .5rem 1rem; margin: .75rem 0; }
+    .finding.contraindicated { border-color: var(--danger); }
+    .finding.high { border-color: var(--danger); }
+    .finding.moderate { border-color: var(--warn); }
+    .finding.low { border-color: var(--ok); }
+    .finding h3 { margin: .1rem 0; font-size: 1rem; }
+    .finding p { margin: .25rem 0; color: var(--muted); font-size: .9rem; }
+    ul { margin: .5rem 0; padding-left: 1.2rem; }
+    .hidden { display: none; }
+    .chip { display: inline-block; background: #0b1220; border: 1px solid #334155; padding: .2rem .6rem; border-radius: 999px; font-size: .8rem; margin: .15rem; }
+    .err { color: var(--danger); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>💊 Drug Interaction Checker Agent</h1>
+    <p class="sub">Multi-agent safety report · powered by OpenAI Agents SDK + CrewAI</p>
+
+    <div class="disclaimer">
+      ⚠️ <strong>Not medical advice.</strong> This is an automated demonstration.
+      It does not replace a doctor or pharmacist. Always confirm with a qualified
+      healthcare professional before changing any medication.
+    </div>
+
+    <div class="card">
+      <label for="meds">Enter the patient's medications (comma separated)</label>
+      <textarea id="meds" placeholder="e.g. warfarin, aspirin, lisinopril, spironolactone"></textarea>
+      <button id="checkBtn">Run Safety Check</button>
+    </div>
+
+    <div id="loading" class="card hidden">Analyzing with the agent crew…</div>
+    <div id="error" class="card hidden err"></div>
+    <div id="result" class="card hidden">
+      <div id="reportHead"></div>
+      <div id="findings"></div>
+      <div id="recs"></div>
+      <div class="disclaimer" id="reportDisclaimer" style="margin-top:1rem;"></div>
+    </div>
+  </div>
+
+  <script>
+    const btn = document.getElementById('checkBtn');
+    const meds = document.getElementById('meds');
+    const loading = document.getElementById('loading');
+    const errorEl = document.getElementById('error');
+    const result = document.getElementById('result');
+
+    btn.addEventListener('click', async () => {
+      const raw = meds.value.split(',').map(s => s.trim()).filter(Boolean);
+      if (!raw.length) { showError('Please enter at least one medication.'); return; }
+      errorEl.classList.add('hidden');
+      result.classList.add('hidden');
+      loading.classList.remove('hidden');
+      btn.disabled = true;
+      try {
+        const res = await fetch('/check', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ medications: raw })
+        });
+        if (!res.ok) throw new Error('Server returned ' + res.status);
+        const data = await res.json();
+        render(data.report, data.disclaimer);
+      } catch (e) {
+        showError('Error: ' + e.message);
+      } finally {
+        loading.classList.add('hidden');
+        btn.disabled = false;
+      }
+    });
+
+    function showError(msg) {
+      errorEl.textContent = msg;
+      errorEl.classList.remove('hidden');
+      loading.classList.add('hidden');
+    }
+
+    function render(r, disclaimer) {
+      const head = document.getElementById('reportHead');
+      const riskClass = (r.overall_risk || 'low').toLowerCase();
+      head.innerHTML = `
+        <h2>Safety Report</h2>
+        <p>Overall risk: <span class="risk ${riskClass}">${r.overall_risk || 'low'}</span></p>
+        <div>Medications checked: ${(r.patient_medications||[]).map(m=>`<span class="chip">${m}</span>`).join('')}</div>
+        ${(r.unrecognised_medications||[]).length ? `<p class="err">Not recognised: ${r.unrecognised_medications.join(', ')}</p>` : ''}
+      `;
+
+      const f = document.getElementById('findings');
+      if (r.findings && r.findings.length) {
+        f.innerHTML = '<h3>Flagged interactions</h3>' + r.findings.map(x => `
+          <div class="finding ${x.severity}">
+            <span class="risk ${x.severity}">${x.severity}</span>
+            <h3>${x.drug_a} + ${x.drug_b}</h3>
+            <p><strong>Mechanism:</strong> ${x.mechanism}</p>
+            <p><strong>Management:</strong> ${x.management}</p>
+          </div>`).join('');
+      } else {
+        f.innerHTML = '<p>No known dangerous interactions found for the recognised medications.</p>';
+      }
+
+      const recs = document.getElementById('recs');
+      recs.innerHTML = (r.recommendations && r.recommendations.length)
+        ? '<h3>Recommendations</h3><ul>' + r.recommendations.map(x=>`<li>${x}</li>`).join('') + '</ul>'
+        : '';
+
+      document.getElementById('reportDisclaimer').textContent = disclaimer;
+      result.classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>
