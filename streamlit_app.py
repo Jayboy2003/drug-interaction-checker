@@ -165,6 +165,3 @@ with st.sidebar:
     st.write("OpenAI key set:", bool(os.getenv("OPENAI_API_KEY")))
     st.write("Model:", os.getenv("OPENAI_MODEL", "gpt-4o-mini"))
     st.caption(DISCLAIMER)
-    st.write("OpenAI key set:", bool(os.getenv("OPENAI_API_KEY")))
-    st.write("Model:", os.getenv("OPENAI_MODEL", "gpt- -mini"))
-    st.caption(DISCLAIMER)
