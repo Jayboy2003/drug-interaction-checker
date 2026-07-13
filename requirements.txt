@@ -1,0 +1,15 @@
+# Drug Interaction Checker Agent - dependencies
+# Core agent frameworks
+openai>=1.40.0
+openai-agents>=0.0.5
+crewai>=0.30.0
+crewai-tools>=0.10.0
+pydantic>=2.6.0
+python-dotenv>=1.0.0
+
+# API + frontend serving
+fastapi>=0.110.0
+uvicorn[standard]>=0.29.0
+
+# (Optional) nicer async if needed
+httpx>=0.27.0

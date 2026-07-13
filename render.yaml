@@ -1,0 +1,17 @@
+# Render.com blueprint config for one-click deploy.
+# Push this repo to GitHub, then in Render: New -> Blueprint -> connect repo.
+services:
+  - type: web
+    name: drug-interaction-checker
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    branch: main
+    healthCheckPath: /health
+    envVars:
+      - key: PORT
+        value: 8000
+      - key: OPENAI_API_KEY
+        sync: false   # you will paste your key in the Render dashboard
+      - key: OPENAI_MODEL
+        value: gpt-4o-mini
